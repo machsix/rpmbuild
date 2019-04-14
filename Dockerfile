@@ -15,19 +15,23 @@ RUN yum install -y yum-utils && \
 
 RUN yum install -y gcc gcc-c++ gcc-gfortran \
                    rpm-build redhat-rpm-config \
+                   rpmdevtools \
                    libtool libtool-ltdl \
-                   sudo \
-                   make cmake \
-                   automake autoconf \
-                   git pkgconfig \
-                   wget curl && \
-     yum install -y devtoolset-7 && \
-     yum clean all && \
-     rm -rf /var/cache/yum
+                   sudo git \
+                   make automake autoconf pkgconfig
+
+RUN yum install -y devtoolset-7
+
+RUN yum install -y wget curl nano tmux rsync jq
+
+RUN yum clean all && \
+      rm -rf /var/cache/yum && \
+      rm -rf /tmp/*
+
 
 RUN mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} && \
      echo "# macros"                    >  /root/rpmbuild/.rpmmacros && \
-     echo "%_topdir /root/rpmbuild/rpm" >> /root/rpmbuild/.rpmmacros && \
+     echo "%_topdir /root/rpmbuild" >> /root/rpmbuild/.rpmmacros && \
      echo "%_sourcedir %{_topdir}"      >> /root/rpmbuild/.rpmmacros && \
      echo "%_builddir %{_topdir}"       >> /root/rpmbuild/.rpmmacros && \
      echo "%_specdir %{_topdir}"        >> /root/rpmbuild/.rpmmacros && \
@@ -35,8 +39,24 @@ RUN mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} && \
      echo "%_srcrpmdir %{_topdir}"      >> /root/rpmbuild/.rpmmacros
 
 ENV FLAVOR=rpmbuild OS=centos DIST=el7 VERSON_ID=7
+
+# the mounting point for SPECS and SOURCE
 VOLUME ["/root/volume"]
 
 WORKDIR /root/rpmbuild
+
+# the script to package rpm
+ADD --chown=root:root build_script.sh /root/rpmbuild
+ADD Dockerfile /root/rpmbuild
+
 CMD ["/bin/bash"]
+
+# Step 1:
+#    docker run -dit -v ${PATH_PACKAGE}/../:/root/volume --name centos7 machsix/rpmbuild:centos7
+#
+# Step 2:
+#   use gcc 7:
+#     docker exec -it centos7 bash /root/rpmbuild/buid_script.sh ${NAME_PACKAGE} 7
+#   use gcc 4:
+#     docker exec -it centos7 bash /root/rpmbuild/buid_script.sh ${NAME_PACKAGE}
 

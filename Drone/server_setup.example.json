@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Drone CI",
+    "type": "docker",
+    "image": "drone/drone:1",
+    "conf": {
+      "0": [],
+      "restart": "always",
+      "detach": true,
+      "name": "drone",
+      "volume": [
+        ["/var/run/docker.sock", "/var/run/docker.sock"],
+        ["/opt/docker/volume/drone", "/data"]
+      ],
+      "publish": [
+        ["127.0.0.1:5001", "80"],
+        ["127.0.0.1:5002", "443"]
+      ],
+      "env": {
+        "drone": {
+          "github": {
+            "server": "https://github.com",
+            "client": {
+              "id": "your-github-api-id",
+              "secret": "your-github-api-password"
+            }
+          },
+          "gogs": {
+            "server": "https://git.example.com"
+          },
+          "server": {
+            "host": "drone.example.com",
+            "proto": "https"
+          },
+          "tls": {
+            "autocert": false,
+            "cert": "/etc/certs/drone.example.com/server.crt",
+            "key": "/etc/certs/drone.example.com/server.key"
+          },
+          "database": {
+            "driver": "postgres",
+            "datasource": "postgres://drone:drone@localhost:5433/drone"
+          },
+          "git": {
+            "always_auth": false
+          },
+          "runner": {
+            "capacity": 5
+          }
+        }
+      }
+    }
+  }
+]

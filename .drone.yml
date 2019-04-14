@@ -1,0 +1,19 @@
+kind: pipeline
+name: default
+
+steps:
+- name: build
+  image: machsix/rpmbuild:centos7
+  pull: always
+  environment:
+    GH_TOKEN:
+      from_secret: GH_TOKEN
+  commands:
+  - cat /etc/os-release
+  - pwd
+  - git status
+  - ./batch_build.sh
+  - ./drone_deploy.sh
+  when:
+    branch:
+    - master
