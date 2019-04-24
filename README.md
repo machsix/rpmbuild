@@ -1,6 +1,13 @@
-# Centos 7 RPM Build
+# Personal RPM repository
+[![Build Status](https://drone.machx.net/api/badges/machsix/rpmbuild/status.svg)](https://drone.machx.net/machsix/rpmbuild)
 
-Customized container used to build RPM for CentOS 7
+A CentOS7 yum repository and a customized container used to build RPM for CentOS 7
+
+## Repository
+```bash
+curl -L https://raw.githubusercontent.com/machsix/rpmbuild/master/machsix.repo > /etc/yum.repos.d/machsix.repo
+yum makecache
+```
 
 ## Container
 Check docker file at https://github.com/machsix/rpmbuild. The container has the following packages:

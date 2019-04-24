@@ -1,5 +1,6 @@
 Drone/server_setup.json filter=git-crypt diff=git-crypt
 Drone/*.sh filter=git-crypt diff=git-crypt
 Drone/*.yml filter=git-crypt diff=git-crypt
+Drone/fury.txt filter=git-crypt diff=git-crypt
 .gitattributes !filter !diff
 .git-crypt !filter !diff

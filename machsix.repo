@@ -1,0 +1,5 @@
+[machsix]
+name=Machsix Private Repo
+baseurl=https://yum.fury.io/machsix/
+enabled=1
+gpgcheck=0
